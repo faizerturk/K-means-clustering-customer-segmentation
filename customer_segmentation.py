@@ -92,6 +92,8 @@ df['segments_kmean']=segments
 #for elbos technique finding best numbers of cluster
 #also for showing the score how many cluster provide best result
 from sklearn.metrics import silhouette_score
+
+print("-----K-means Clustering----")
 l=[]
 for i in range(2,6):
     km=KMeans(n_clusters=i)
@@ -99,10 +101,11 @@ for i in range(2,6):
     segments=km.predict(df)
     ss = silhouette_score(df,segments)
     l+=[ss]
-    print("score:",i,ss)
+    print("score:",i, " many clusters ",ss)
 
 distance=pd.DataFrame(data=l)
 distance.plot()
+
 
 
 from sklearn.cluster import AgglomerativeClustering
@@ -110,8 +113,17 @@ hc=AgglomerativeClustering(n_clusters=4)
 segments2=hc.fit_predict(df)
 df['segments_hc']= segments2
 
+print("-----AgglomerativeClustering----")
+l=[]
+for i in range(2,6):
+    hc=AgglomerativeClustering(n_clusters=i)
+    segments=hc.fit_predict(df)
+    ss = silhouette_score(df,segments)
+    l+=[ss]
+    print("score:",i, " many clusters ",ss)
+    
 import matplotlib.pyplot as plt #matplotlib library for plotting
-import seaborn as sns                  #seaborn library for plotting
+import seaborn as sns           #seaborn library for plotting
 
 
 Person = [ "Age", "Children", "Is_Parent", "Education","Family_Size","Recency"]
@@ -150,5 +162,3 @@ sns.pairplot(df[lets_plot], hue = 'Is_Parent')
 
 lets_plot = ['Income', 'TotalSpent' ,'Age', 'Family_Size','Is_Parent','Education']
 sns.pairplot(df[lets_plot], hue = 'Education')
-
-
